@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.postgres',
     
     # Cloudinary Storage (Must be ABOVE staticfiles)
     'cloudinary_storage',
