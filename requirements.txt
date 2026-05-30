@@ -1,0 +1,8 @@
+django
+django-environ
+psycopg2-binary
+djangorestframework
+djangorestframework-simplejwt
+redis
+flake8
+Pillow
