@@ -1,7 +1,10 @@
+from django.conf import settings
 # pyrefly: ignore [missing-import]
 from enum import unique
+# pyrefly: ignore [missing-import]
 from django.db import models
 from .category import Category
+from django.db.models import Avg
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
@@ -15,6 +18,10 @@ class Product(models.Model):
     in_stock = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def get_average_rating(self):
+        average = self.reviews.aggregate(Avg('rating'))['rating__avg']
+        return average if average else 0
 
     class Meta:
         verbose_name_plural = 'products'
@@ -57,3 +64,16 @@ class ProductVariant(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.sku}"
+        
+class Review(models.Model):
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)]) 
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('product', 'user')
+
+    def __str__(self):
+        return f"{self.user.email} - {self.product.name} - {self.rating} Stars"

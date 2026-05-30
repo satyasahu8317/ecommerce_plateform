@@ -1,10 +1,11 @@
 # pyrefly: ignore [missing-import]
 from django.contrib import admin
-from .models import Category, Product, ProductImage, Attribute, AttributeValue, ProductVariant
+from .models import Category, Product, ProductImage, Attribute, AttributeValue, ProductVariant, Review
 # Register your models here.
 
 admin.site.register(Attribute)
 admin.site.register(AttributeValue)
+admin.site.register(Review)
 
 
 @admin.register(Category)
