@@ -1,4 +1,5 @@
 # pyrefly: ignore [missing-import]
+from enum import unique
 from django.db import models
 from .category import Category
 
@@ -29,3 +30,30 @@ class ProductImage(models.Model):
     is_feature = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
         
+
+class Attribute(models.Model):
+    name = models.CharField(max_length=225)
+
+    def __str__(self):
+        return self.name
+
+
+class AttributeValue(models.Model):
+    attribute = models.ForeignKey(Attribute, related_name='values', on_delete=models.CASCADE)
+    value = models.CharField(max_length=225)
+
+    def __str__(self):
+        return f"{self.attribute.name}:{self.value}"
+
+
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, related_name = 'variants', on_delete=models.CASCADE)
+    attribute_values = models.ManyToManyField(AttributeValue, related_name='variants')
+    sku = models.CharField(max_length=50, unique=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+
+    def __str__(self):
+        return f"{self.product.name} - {self.sku}"
