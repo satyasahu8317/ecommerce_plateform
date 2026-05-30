@@ -51,22 +51,29 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    
+    # Cloudinary Storage (Must be ABOVE staticfiles)
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary', # This one is also required!
+
+    # Your Custom Apps
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
     'orders.apps.OrdersConfig',
     'payments.apps.PaymentsConfig',
     'cart.apps.CartConfig',
+
+    # Third-Party Apps
     'rest_framework',
-    
 ]
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':(
@@ -158,3 +165,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+}   
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

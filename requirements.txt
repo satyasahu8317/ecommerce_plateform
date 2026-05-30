@@ -6,3 +6,5 @@ djangorestframework-simplejwt
 redis
 flake8
 Pillow
+cloudinary
+django-cloudinary-storage
