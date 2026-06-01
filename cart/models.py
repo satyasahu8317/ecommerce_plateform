@@ -21,3 +21,8 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} X {self.product.name}"
+
+    def get_total_price(self):
+        # Use variant price if available, otherwise use base product price
+        price = self.variant.price if self.variant and self.variant.price else self.product.price 
+        return price*self.quantity
