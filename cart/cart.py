@@ -137,3 +137,24 @@ class CartManager:
         else:
             self.cart = {}
             self.session.modified = True    
+    
+    def apply_coupon(self, code):
+        # Finds a coupon and attaches it to the sesssion/cart
+        from coupons.models import Coupon
+        try:
+            coupon_obj = Coupon.objects.get(code__iexact=code,active=True)
+            if coupon_obj.is_valid():
+                if self.user.is_authenticated:
+                    # Save to Database for members
+                    from .models import Cart
+                    cart_obj, _ = Cart.objects.get_or_create(user=self.user)
+                    cart_obj.coupon = coupon_obj
+                    cart_obj.save()
+                else:
+                    # save to session for guests
+                    self.session['coupon_id'] = coupon_obj.id
+                    self.session.modified = True
+                return True 
+        except Coupon.DoesNotExist:
+            return False
+        return False

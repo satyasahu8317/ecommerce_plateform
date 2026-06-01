@@ -1,14 +1,16 @@
 from django.db import models
 from django.conf import settings
 from products.models import Product, ProductVariant
+from coupons.models import Coupon
 
 
 # Create your models here.
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
     on_delete=models.CASCADE, related_name='cart')
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return f"Cart: {self.user.email}"
