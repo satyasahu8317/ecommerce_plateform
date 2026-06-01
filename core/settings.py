@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.postgres',
     'django_filters',
+    'addresses.apps.AddressesConfig',   
     
     # Cloudinary Storage (Must be ABOVE staticfiles)
     'cloudinary_storage',
